@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falling Characters with Matrix Guy</title>
+    <style>
+        body {
+            background-color: black; /* Black background */
+            overflow: hidden; /* Hide overflow */
+            font-family: monospace; /* Monospace font for a matrix look */
+            color: #0F0; /* Green text color */
+            height: 100vh; /* Full height of the viewport */
+            margin: 0; /* Remove default margin */
+            position: relative; /* For absolute positioning of the image */
+        }
+        .falling-char {
+            position: absolute;
+            opacity: 0.8; /* Slight transparency */
+            font-size: 20px; /* Font size for characters */
+            white-space: nowrap; /* Prevent wrapping of characters */
+            bottom: 100%; /* Start from the top of the column */
+            animation: fall linear; /* Use CSS animation for falling */
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh); /* Move down to the bottom */
+            }
+        }
+
+        /* Style for the image and speech bubble */
+        .matrix-guy {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 50%; /* Center horizontally */
+            transform: translate(-50%, -50%); /* Adjust position */
+            z-index: 1; /* Ensure it appears above the falling characters */
+            width: 200px; /* Set a width for the image */
+        }
+
+        .speech-bubble {
+            position: absolute;
+            top: 30%; /* Position above the image */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8); /* White background with transparency */
+            padding: 10px; /* Padding for bubble */
+            border-radius: 10px; /* Rounded corners */
+            z-index: 1; /* Ensure it appears above the falling characters */
+            font-size: 18px; /* Font size for speech text */
+            color: black; /* Black text color */
+            white-space: nowrap; /* Prevent text wrapping */
+        }
+    </style>
+</head>
+<body>
+    <div class="speech-bubble">you're a homo</div>
+    <img class="matrix-guy" src="https://images.bauerhosting.com/celebrity/sites/3/2023/08/Keanu-Reeves.jpg?auto=format&w=1440&q=80" alt="Matrix Guy" />
+
+    <script>
+        const characters = "FAGGOT"; // Only specified characters to use
+        const numColumns = Math.floor(window.innerWidth / 20); // Number of columns based on screen width
+        const maxChars = Math.ceil(window.innerHeight / 20) * numColumns; // Calculate maximum characters based on viewport height
+        let currentChars = 0; // Current number of characters on the screen
+
+        function createFallingCharacter(i) {
+            const fallingChar = document.createElement("div");
+            fallingChar.className = "falling-char";
+            fallingChar.textContent = characters.charAt(Math.floor(Math.random() * characters.length)); // Random character from specified set
+            fallingChar.style.left = `${i * 20}px`; // Position each character in its column
+            fallingChar.style.fontSize = `${Math.random() * 20 + 10}px`; // Random font size
+            document.body.appendChild(fallingChar);
+
+            // Start falling animation
+            fallingChar.style.animationDuration = `${Math.random() * 2 + 2}s`; // Random fall duration
+            fallingChar.style.animationFillMode = 'forwards'; // Maintain end state of animation
+
+            currentChars++; // Increment character count
+
+            // Remove character when the animation ends
+            fallingChar.addEventListener('animationend', () => {
+                document.body.removeChild(fallingChar); // Remove character after falling
+                currentChars--; // Decrement character count
+            });
+        }
+
+        // Create falling characters at random intervals
+        function startFalling() {
+            for (let i = 0; i < numColumns; i++) {
+                if (currentChars < maxChars) {
+                    createFallingCharacter(i); // Create character in each column
+                }
+            }
+            setTimeout(startFalling, 150); // Start next batch of falling characters
+        }
+
+        startFalling(); // Begin the falling animation
+    </script>
+</body>
+</html>
